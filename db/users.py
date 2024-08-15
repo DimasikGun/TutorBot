@@ -31,3 +31,4 @@ class Parents(Users):
 
 class Students(DiscordMixin, Users):
     parent = Column(BigInteger, ForeignKey('parents.user_id'), nullable=True)
+    grade = Column(Integer, nullable=True)
