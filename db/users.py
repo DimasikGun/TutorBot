@@ -21,7 +21,7 @@ class Users(TimestampMixin, Base):
 
 
 class Tutors(DiscordMixin, Users):
-    second_name = Column(String(32), nullable=False)
+    second_name = Column(String(32), nullable=True)
     lesson_max_duration = Column(Integer, nullable=False)
 
 
