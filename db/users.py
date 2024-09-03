@@ -1,4 +1,4 @@
-from sqlalchemy import Column, BigInteger, String, Integer, ForeignKey
+from sqlalchemy import Column, BigInteger, String, Integer, ForeignKey, Numeric
 from sqlalchemy.orm import declared_attr
 
 from db.base import Base, TimestampMixin
@@ -8,6 +8,12 @@ class DiscordMixin:
     @declared_attr
     def discord(cls):
         return Column(String(32), nullable=True)
+
+
+class BalanceMixin:
+    @declared_attr
+    def balance(cls):
+        return Column(Numeric(10, 2), nullable=True, default=None)
 
 
 class Users(TimestampMixin, Base):
@@ -25,10 +31,10 @@ class Tutors(DiscordMixin, Users):
     lesson_max_duration = Column(Integer, nullable=False)
 
 
-class Parents(Users):
+class Parents(BalanceMixin, Users):
     __tablename__ = 'parents'
 
 
-class Students(DiscordMixin, Users):
+class Students(BalanceMixin, DiscordMixin, Users):
     parent = Column(BigInteger, ForeignKey('parents.user_id'), nullable=True)
     grade = Column(Integer, nullable=True)

@@ -39,16 +39,17 @@ async def create_tutor(session: AsyncSession, user_id, username, name, surname, 
     return tutor
 
 
-async def create_student(session: AsyncSession, user_id, username, name, surname, phone, parent, discord, grade):
+async def create_student(session: AsyncSession, user_id, username, name, surname, phone=None, parent=None, discord=None,
+                         grade=None, balance=None):
     """Creates a new student record in the database and caches it."""
     student = Students(user_id=user_id, username=username, name=name, surname=surname, phone=phone,
-                       parent=parent, discord=discord, grade=grade)
+                       parent=parent, discord=discord, grade=grade, balance=balance)
     await create_db_item(session, student)
     await cache_db_item(student, f'student:{user_id}')
     return student
 
 
-async def create_parent(session: AsyncSession, user_id, username, name, surname, phone):
+async def create_parent(session: AsyncSession, user_id, username, name, surname, phone=None):
     """Creates a new parent record in the database and caches it."""
     parent = Parents(user_id=user_id, username=username, name=name, surname=surname, phone=phone)
     await create_db_item(session, parent)

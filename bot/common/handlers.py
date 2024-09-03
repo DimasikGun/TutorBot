@@ -151,7 +151,7 @@ async def create_user_discord(message: Message, state: FSMContext, session: Asyn
                                  reply_markup=ReplyKeyboardRemove())
         else:
             await create_student(session, message.from_user.id, message.from_user.username, data['name'],
-                                 data['surname'], data['phone'], None, None, None)
+                                 data['surname'], data['phone'], balance=0)
             await message.answer('Дякуємо за реєстрацію!',
                                  reply_markup=ReplyKeyboardRemove())
             await state.clear()
@@ -168,7 +168,7 @@ async def create_user_discord(message: Message, state: FSMContext, session: Asyn
                                  reply_markup=ReplyKeyboardRemove())
         else:
             await create_student(session, message.from_user.id, message.from_user.username, data['name'],
-                                 data['surname'], data['phone'], None, message.text, None)
+                                 data['surname'], data['phone'], discord=message.text, balance=0)
             await message.answer('Дякуємо за реєстрацію!',
                                  reply_markup=ReplyKeyboardRemove())
             await state.clear()
