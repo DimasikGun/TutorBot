@@ -122,7 +122,7 @@ async def create_user_grade(message: Message, state: FSMContext):
         await message.answer('Введіть свій нік Discord, або натисніть кнопку "Пропустити"', reply_markup=skip_keyboard)
     else:
         try:
-            if int(message.text) >= 1:
+            if 1 <= int(message.text) <= 12:
                 await state.update_data(grade=int(message.text))
                 await state.set_state(CreateUser.Discord)
                 await message.answer('Введіть свій нік Discord, або натисніть кнопку "Пропустити"',
