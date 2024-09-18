@@ -1,6 +1,7 @@
+from sqlalchemy import delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from db import Tutors, Parents, Students
-from db.queries.services import get_single_object_by_id, create_db_item, cache_db_item
+from db.queries.services import get_single_object_by_id, create_db_item, cache_db_item, delete_single_object_by_id
 
 
 async def get_single_parent(session: AsyncSession, user_id):
@@ -55,3 +56,18 @@ async def create_parent(session: AsyncSession, user_id, username, name, surname,
     await create_db_item(session, parent)
     await cache_db_item(parent, f'parent:{user_id}')
     return parent
+
+
+async def delete_parent(session: AsyncSession, user_id):
+    """Deletes a parent record from the database and cache."""
+    await delete_single_object_by_id(session, user_id, f'parent:{user_id}', Parents)
+
+
+async def delete_student(session: AsyncSession, user_id):
+    """Deletes a student record from the database and cache."""
+    await delete_single_object_by_id(session, user_id, f'student:{user_id}', Students)
+
+
+async def delete_tutor(session: AsyncSession, user_id):
+    """Deletes a tutor record from the database and cache."""
+    await delete_single_object_by_id(session, user_id, f'tutor:{user_id}', Tutors)

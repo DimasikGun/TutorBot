@@ -2,8 +2,10 @@ import json
 from datetime import datetime
 
 from redis.asyncio import Redis
-from sqlalchemy import select
+from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from db import Users
 
 # initialize it in this file due to circular import issue
 redis = Redis(host='localhost', port=6379, db=1)
@@ -106,3 +108,19 @@ async def get_single_object_by_id(session: AsyncSession, object_id, redis_key, m
         if obj:
             await cache_db_item(obj, redis_key)
     return obj
+
+
+async def delete_single_object_by_id(session: AsyncSession, object_id, redis_key, model):
+    """Template function for deleting single object by id"""
+    if issubclass(model, Users):
+        await session.execute(
+            delete(model)
+            .where(model.user_id == object_id)
+        )
+    else:
+        await session.execute(
+            delete(model)
+            .where(model.id == object_id)
+        )
+    await session.commit()
+    await redis.delete(redis_key)
