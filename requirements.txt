@@ -5,3 +5,5 @@ alembic==1.13.1
 asyncpg==0.29.0
 redis==5.0.1
 aioredis==2.0.1
+pytest==8.3.3
+pytest-asyncio==0.24.0
