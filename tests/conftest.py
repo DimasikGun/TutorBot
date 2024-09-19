@@ -11,7 +11,7 @@ from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
 from bot.middlewares.db import DbSessionMiddleware
-from bot.tests.mocked_bot import MockedBot
+from tests.mocked_bot import MockedBot
 
 TESTUSER = User(id=1, is_bot=False, first_name="FirstName1", last_name="LastName1", language_code="uk-UA",
                 username="um")
@@ -29,7 +29,7 @@ def storage_key_fixture(bot: MockedBot):
     return StorageKey(chat_id=TESTCHAT.id, user_id=TESTUSER.id, bot_id=bot.id)
 
 
-@pytest_asyncio.fixture()
+@pytest_asyncio.fixture(scope="function")
 async def redis_storage_fixture():
     redis_fixture = Redis(host='localhost', port=6379, db=3)
     storage = RedisStorage(redis=redis_fixture)
@@ -44,7 +44,7 @@ async def redis_storage_fixture():
         await storage.close()
 
 
-@pytest.fixture()
+@pytest.fixture(scope="function")
 def db_session_fixture():
     load_dotenv()
     engine = create_async_engine(url=os.getenv('TEST_DB_URL'), echo=True)
