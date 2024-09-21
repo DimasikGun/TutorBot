@@ -187,7 +187,7 @@ async def create_user_add_parent(message: Message, state: FSMContext, session: A
         await message.answer('Дякуємо за реєстрацію!',
                              reply_markup=ReplyKeyboardRemove())
         await state.clear()
-    except IntegrityError:
+    except (IntegrityError, ValueError):
         await state.set_state(CreateUser.Parent)
         await message.answer('Введіть коректний код одного з батьків')
 
