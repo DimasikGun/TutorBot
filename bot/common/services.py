@@ -3,7 +3,7 @@ import re
 
 def validate_ukrainian_letters(name: str) -> bool:
     """Validates that the name contains only Ukrainian Cyrillic letters, without numbers or special characters."""
-    pattern = r'^[А-ЩЬЮЯЄІЇҐа-щьюяєіїґ]+$'
+    pattern = r'^[А-ЩЬЮЯЄІЇҐа-щьюяєіїґ\'\-]+$'
     return bool(re.match(pattern, name))
 
 
