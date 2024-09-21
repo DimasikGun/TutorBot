@@ -2,12 +2,10 @@ import json
 from datetime import datetime
 from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from db import Users, Parents
+from db import Parents
 from db.queries.services import serialize_single_db_item, serialize_many_db_items, deserialize_single_db_item, \
-    deserialize_db_items, get_cached_db_item, cache_db_item, delete_single_object_by_id, get_single_object_by_id
+    deserialize_db_items, get_cached_db_item, cache_db_item, delete_single_object_by_id, redis
 from db.users import Notes
 
 
@@ -123,3 +121,4 @@ async def test_delete_single_object_by_id(mock_commit, mock_execute, mock_redis_
         mock_execute.assert_called()
         mock_redis_delete.assert_called_with(redis_key)
         mock_commit.assert_called()
+        await redis.flushdb()
