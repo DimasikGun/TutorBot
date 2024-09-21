@@ -1,3 +1,4 @@
+import asyncio
 import os
 
 import pytest
@@ -29,8 +30,18 @@ def storage_key_fixture(bot: MockedBot):
     return StorageKey(chat_id=TESTCHAT.id, user_id=TESTUSER.id, bot_id=bot.id)
 
 
+@pytest.fixture(scope="session")
+def event_loop():
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        loop = asyncio.new_event_loop()
+    yield loop
+    loop.close()
+
+
 @pytest_asyncio.fixture(scope="function")
-async def redis_storage_fixture():
+async def redis_storage_fixture(event_loop):
     redis_fixture = Redis(host='localhost', port=6379, db=3)
     storage = RedisStorage(redis=redis_fixture)
     try:
@@ -39,9 +50,8 @@ async def redis_storage_fixture():
     except ConnectionError as e:
         pytest.fail(str(e))
     finally:
-        conn = await storage.redis
-        await conn.flushdb()
-        await storage.close()
+        await redis_fixture.flushdb()
+        await redis_fixture.aclose()
 
 
 @pytest.fixture(scope="function")
