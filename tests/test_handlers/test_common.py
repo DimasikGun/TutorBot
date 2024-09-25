@@ -1,4 +1,3 @@
-import asyncio
 from unittest.mock import AsyncMock
 
 import pytest
@@ -9,7 +8,7 @@ from bot.common.handlers import cmd_start, CreateUser, create_user_add_name, cre
     create_user_add_phone, create_user_add_second_name, create_user_grade, create_user_discord, create_user_add_parent, \
     create_tutor_lesson_max_duration
 from bot.common.keyboards import choose_role, choose_grade, skip_keyboard
-from db.queries.common import delete_parent, create_parent, create_tutor, delete_tutor, delete_student
+from db.queries.common import delete_parent, create_parent, delete_tutor, delete_student
 from tests.conftest import TESTUSER
 
 
@@ -114,7 +113,7 @@ async def test_create_user_add_phone_valid(redis_storage_fixture, storage_key_fi
 
     assert await state.get_state() == CreateUser.Grade
     message.answer.assert_called_with(
-        'Введіть клас в якому ви навчаєтесь або натисніть кнопку "Я займаюсь без батьків", якщо ви дорослий і будете комунікувати із репетиторами власноруч',
+        'Введіть клас в якому ви навчаєтесь або натисніть кнопку "Я займаюсь без батьків", якщо ви дорослий і будете комунікувати із репетиторами власноруч',   # noqa E501
         reply_markup=choose_grade
     )
 
@@ -201,7 +200,7 @@ async def test_create_user_discord_valid(redis_storage_fixture, storage_key_fixt
 
     assert await state.get_state() == CreateUser.Parent
     message.answer.assert_called_with('Введіть код, який вам надав один із батьків для створення "Сім\'ї"',
-                                 reply_markup=ReplyKeyboardRemove())
+                                      reply_markup=ReplyKeyboardRemove())
 
 
 @pytest.mark.asyncio
@@ -219,14 +218,12 @@ async def test_create_user_discord_invalid(redis_storage_fixture, storage_key_fi
     message.answer.assert_called_with('Введіть коректну інформацію')
 
 
-
 @pytest.mark.asyncio
 async def test_create_user_add_parent_valid(redis_storage_fixture, storage_key_fixture, db_session_fixture):
     message = AsyncMock()
     message.text = 2
     message.from_user = TESTUSER
     state = FSMContext(storage=redis_storage_fixture, key=storage_key_fixture)
-
 
     async with db_session_fixture.begin() as session:
         await create_parent(session, 2, TESTUSER.username, 'Ім\'я', 'Прізвище')
@@ -246,7 +243,6 @@ async def test_create_user_add_parent_valid(redis_storage_fixture, storage_key_f
         await delete_student(session, TESTUSER.id)
     async with db_session_fixture.begin() as session:
         await delete_parent(session, 2)
-
 
     assert await state.get_state() is None
     message.answer.assert_called_with('Дякуємо за реєстрацію!', reply_markup=ReplyKeyboardRemove())
@@ -274,7 +270,6 @@ async def test_create_user_add_parent_invalid(redis_storage_fixture, storage_key
     message.answer.assert_called_with('Введіть коректний код одного з батьків')
 
 
-
 @pytest.mark.asyncio
 async def test_create_tutor_lesson_max_duration_valid(redis_storage_fixture, storage_key_fixture, db_session_fixture):
     message = AsyncMock()
@@ -297,7 +292,6 @@ async def test_create_tutor_lesson_max_duration_valid(redis_storage_fixture, sto
         await create_tutor_lesson_max_duration(message, state, session)
     async with db_session_fixture.begin() as session:
         await delete_tutor(session, TESTUSER.id)
-
 
     assert await state.get_state() is None
     message.answer.assert_called_with('Дякуємо за реєстрацію!', reply_markup=ReplyKeyboardRemove())

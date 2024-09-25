@@ -1,4 +1,4 @@
-from aiogram import Router, F
+from aiogram import Router
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
@@ -88,7 +88,7 @@ async def create_user_add_phone(message: Message, state: FSMContext, session: As
             await state.update_data(phone=message.text)
             await state.set_state(CreateUser.Grade)
             await message.answer(
-                'Введіть клас в якому ви навчаєтесь або натисніть кнопку "Я займаюсь без батьків", якщо ви дорослий і будете комунікувати із репетиторами власноруч',
+                'Введіть клас в якому ви навчаєтесь або натисніть кнопку "Я займаюсь без батьків", якщо ви дорослий і будете комунікувати із репетиторами власноруч',  # noqa: E501
                 reply_markup=choose_grade)
         else:
             await state.update_data(phone=message.text)

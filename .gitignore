@@ -1,3 +1,7 @@
 venv
 .idea
 .env
+.coverage
+htmlcov/
+coverage.xml
+flake8.log

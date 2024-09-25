@@ -15,6 +15,7 @@ load_dotenv()
 bot = Bot(token=os.getenv('TOKEN'))
 redis_fsm = Redis(host='localhost', port=6379)
 
+
 async def main():
     engine = create_async_engine(url=os.getenv('DB-URL'), echo=True)
     sessionmaker = async_sessionmaker(engine, expire_on_commit=True)

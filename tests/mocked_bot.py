@@ -26,10 +26,10 @@ class MockedSession(BaseSession):
         self.closed = True
 
     async def make_request(
-        self,
-        bot: Bot,
-        method: TelegramMethod[TelegramType],
-        timeout: Optional[int] = UNSET_PARSE_MODE,
+            self,
+            bot: Bot,
+            method: TelegramMethod[TelegramType],
+            timeout: Optional[int] = UNSET_PARSE_MODE,
     ) -> TelegramType:
         self.closed = False
         self.requests.append(method)
@@ -43,12 +43,12 @@ class MockedSession(BaseSession):
         return response.result  # type: ignore
 
     async def stream_content(
-        self,
-        url: str,
-        headers: Optional[Dict[str, Any]] = None,
-        timeout: int = 30,
-        chunk_size: int = 65536,
-        raise_for_status: bool = True,
+            self,
+            url: str,
+            headers: Optional[Dict[str, Any]] = None,
+            timeout: int = 30,
+            chunk_size: int = 65536,
+            raise_for_status: bool = True,
     ) -> AsyncGenerator[bytes, None]:  # pragma: no cover
         yield b""
 
@@ -71,14 +71,14 @@ class MockedBot(Bot):
         )
 
     def add_result_for(
-        self,
-        method: Type[TelegramMethod[TelegramType]],
-        ok: bool,
-        result: TelegramType = None,
-        description: Optional[str] = None,
-        error_code: int = 200,
-        migrate_to_chat_id: Optional[int] = None,
-        retry_after: Optional[int] = None,
+            self,
+            method: Type[TelegramMethod[TelegramType]],
+            ok: bool,
+            result: TelegramType = None,
+            description: Optional[str] = None,
+            error_code: int = 200,
+            migrate_to_chat_id: Optional[int] = None,
+            retry_after: Optional[int] = None,
     ) -> Response[TelegramType]:
         response = Response[method.__returning__](  # type: ignore
             ok=ok,

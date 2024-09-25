@@ -1,4 +1,3 @@
-from sqlalchemy import delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from db import Tutors, Parents, Students
 from db.queries.services import get_single_object_by_id, create_db_item, cache_db_item, delete_single_object_by_id
